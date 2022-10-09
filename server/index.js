@@ -21,7 +21,7 @@ const playlistRouter = require('./routes/playlists-router')
 app.use('/api', playlistRouter)
 
 // INITIALIZE OUR DATABASE OBJECT
-const db = require('./db')
+const db = require('./db/index')
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 // PUT THE SERVER IN LISTENING MODE
