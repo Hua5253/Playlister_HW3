@@ -49,6 +49,15 @@ deletePlaylist = async (req, res) => {
   return res.status(200).send(playlist);
 };
 
+// update playlister route handler function ->
+updatePlaylist = async (req, res) => {
+    const playlist = await Playlist.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true});
+
+    if (!playlist) return res.status(404).send("playlist not found");
+
+    return res.status(200).send(playlist);    
+}
+
 getPlaylistById = async (req, res) => {
   await Playlist.findOne({ _id: req.params.id }, (err, list) => {
     if (err) {
@@ -58,6 +67,7 @@ getPlaylistById = async (req, res) => {
     return res.status(200).json({ success: true, playlist: list });
   }).catch(err => console.log(err));
 };
+
 getPlaylists = async (req, res) => {
   await Playlist.find({}, (err, playlists) => {
     if (err) {
@@ -71,6 +81,7 @@ getPlaylists = async (req, res) => {
     return res.status(200).json({ success: true, data: playlists });
   }).catch(err => console.log(err));
 };
+
 getPlaylistPairs = async (req, res) => {
   await Playlist.find({}, (err, playlists) => {
     if (err) {
@@ -102,4 +113,5 @@ module.exports = {
   getPlaylistPairs,
   getPlaylistById,
   deletePlaylist,
+  updatePlaylist,
 };
