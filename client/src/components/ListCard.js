@@ -9,11 +9,12 @@ import { GlobalStoreContext } from '../store'
     @author McKilla Gorilla
 */
 function ListCard(props) {
+    const { idNamePair, selected } = props;
     const { store } = useContext(GlobalStoreContext);
     const [ editActive, setEditActive ] = useState(false);
-    const [ text, setText ] = useState("");
+    const [ text, setText ] = useState(idNamePair.name);
     store.history = useHistory();
-    const { idNamePair, selected } = props;
+
 
     function handleLoadList(event) {
         if (!event.target.disabled) {
@@ -26,6 +27,11 @@ function ListCard(props) {
         }
     }
 
+    // handle delete list ->
+    function handleDeleteList() {
+
+    }
+
     function handleToggleEdit(event) {
         event.stopPropagation();
         toggleEdit();
@@ -34,18 +40,24 @@ function ListCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            store.setIsListNameEditActive();
+            // store.setIsListNameEditActive();
         }
         setEditActive(newActive);
     }
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            let id = event.target.id.substring("list-".length);
-            store.changeListName(id, text);
-            toggleEdit();
+            // let id = event.target.id.substring("list-".length);        
+            handleBlur();
         }
     }
+
+    // handle blur->
+    function handleBlur() {
+        store.changeListName(idNamePair._id, text);
+        toggleEdit();
+    }
+
     function handleUpdateText(event) {
         setText(event.target.value );
     }
@@ -75,6 +87,7 @@ function ListCard(props) {
                 type="button"
                 id={"delete-list-" + idNamePair._id}
                 className="list-card-button"
+                onClick={handleDeleteList}
                 value={"\u2715"}
             />
             <input
@@ -94,6 +107,7 @@ function ListCard(props) {
                 className='list-card'
                 type='text'
                 onKeyPress={handleKeyPress}
+                onBlur={handleBlur}
                 onChange={handleUpdateText}
                 defaultValue={idNamePair.name}
             />;
