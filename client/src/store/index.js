@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
-import api from '../api'
+import api from '../api/index'
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -60,8 +60,8 @@ export const useGlobalStore = () => {
             // CREATE A NEW LIST
             case GlobalStoreActionType.CREATE_NEW_LIST: {
                 return setStore({
-                    idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    idNamePairs: payload.idNamePairs,
+                    currentList: payload.playlist,
                     newListCounter: store.newListCounter + 1,
                     listNameActive: false
                 })
@@ -116,7 +116,7 @@ export const useGlobalStore = () => {
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
-                let playlist = response.data.playist;
+                let playlist = response.data.playlist;
                 playlist.name = newName;
                 async function updateList(playlist) {
                     response = await api.updatePlaylistById(playlist._id, playlist);
@@ -141,6 +141,32 @@ export const useGlobalStore = () => {
             }
         }
         asyncChangeListName(id);
+    }
+
+    // This function processes creating a new list ->
+    store.createNewList = function () {
+        let newList = {
+            name: "untitled",
+            songs: [],
+        };
+        async function asyncCreateNewList() {
+            let response = await api.postPlaylist(newList);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                let result = await api.getPlaylistPairs();
+                if (result.data.success) {
+                    let pairsArray = result.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.CREATE_NEW_LIST,
+                        payload: {
+                            idNamePairs: pairsArray,
+                            playlist: playlist
+                        }
+                    })
+                }
+            }
+        }
+        asyncCreateNewList();
     }
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
@@ -186,12 +212,15 @@ export const useGlobalStore = () => {
         }
         asyncSetCurrentList(id);
     }
+
     store.getPlaylistSize = function() {
         return store.currentList.songs.length;
     }
+
     store.undo = function () {
         tps.undoTransaction();
     }
+
     store.redo = function () {
         tps.doTransaction();
     }
