@@ -20,7 +20,8 @@ export const GlobalStoreActionType = {
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
-    UPDATE_CURRENT_LIST: "UPDATE_CURRENT_LIST"
+    UPDATE_CURRENT_LIST: "UPDATE_CURRENT_LIST",
+    MARK_SONG_FOR_CHANGE: "MARK_SONG_FOR_CHANGE"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -35,7 +36,8 @@ export const useGlobalStore = () => {
         currentList: null,
         newListCounter: 0,
         listNameActive: false,
-        listKeyPairMarkedForDeletion: null
+        listKeyPairMarkedForDeletion: null,
+        songKeyMarked: 0
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -141,6 +143,17 @@ export const useGlobalStore = () => {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listKeyPairMarkedForDeletion: null
+                })
+            }
+
+            case GlobalStoreActionType.MARK_SONG_FOR_CHANGE: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listKeyPairMarkedForDeletion: null,
+                    songKeyMarked: payload
                 })
             }
 
@@ -330,6 +343,33 @@ export const useGlobalStore = () => {
         }
         
         store.update_current_list(list);
+    }
+
+    store.markSongForRemove = (index) => {
+        storeReducer({
+            type: GlobalStoreActionType.MARK_SONG_FOR_CHANGE,
+            payload: index
+        })
+    }
+
+    store.removeSong = (index) => {
+        let list = store.currentList;
+
+        if (list != null) 
+            list.songs.splice(index, 1);
+
+        store.update_current_list(list);
+        store.hideRemoveSongModal();
+    }
+
+    store.showRemoveSongModal = () => {
+        let modal = document.getElementById("remove-song-modal");
+        modal.classList.add("is-visible");
+    }
+
+    store.hideRemoveSongModal = () => {
+        let modal = document.getElementById("remove-song-modal");
+        modal.classList.remove("is-visible");
     }
 
     store.undo = function () {
