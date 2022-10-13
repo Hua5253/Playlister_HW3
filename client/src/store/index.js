@@ -19,7 +19,8 @@ export const GlobalStoreActionType = {
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
-    MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION"
+    MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
+    UPDATE_CURRENT_LIST: "UPDATE_CURRENT_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -116,7 +117,8 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    listKeyPairMarkedForDeletion: null
                 });
             }
 
@@ -126,9 +128,22 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     newListCounter: store.newListCounter,
-                    listNameActive: true
+                    listNameActive: true,
+                    listKeyPairMarkedForDeletion: null
                 });
             }
+
+            // ADD A NEW SONG TO THE PLAYLIST ->
+            case GlobalStoreActionType.UPDATE_CURRENT_LIST: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    currentList: payload,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listKeyPairMarkedForDeletion: null
+                })
+            }
+
             default:
                 return store;
         }
@@ -281,6 +296,20 @@ export const useGlobalStore = () => {
         return store.currentList.songs.length;
     }
 
+    // Create a new song in the playlist ->
+    store.addSong = () => {
+        let current_list = store.currentList;
+        let newSong = {
+            title: "untitled",
+            artist: "unknown",
+            youTubeId: "dQw4w9WgXcQ"
+        };
+        current_list.songs.push(newSong);
+        console.log(current_list);
+
+        store.update_current_list(current_list);
+    }
+
     store.undo = function () {
         tps.undoTransaction();
     }
@@ -295,6 +324,17 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: null
         });
+    }
+
+    store.update_current_list = async (playlist) => {
+        const response = await api.updatePlaylistById(playlist._id, playlist);
+        console.log(response);
+        if (response.data.success) {
+            storeReducer({
+                type: GlobalStoreActionType.UPDATE_CURRENT_LIST,
+                payload: playlist
+            })
+        }        
     }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
