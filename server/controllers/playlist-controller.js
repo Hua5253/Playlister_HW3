@@ -43,10 +43,12 @@ createPlaylist = (req, res) => {
 // delete playlister route handler function ->
 deletePlaylist = async (req, res) => {
   const playlist = await Playlist.findByIdAndDelete(req.params.id);
+  const temp_playlist = {success: false, ...playlist};
 
   if (!playlist) return res.status(404).send("playlist not found");
 
-  return res.status(200).send(playlist);
+  temp_playlist.success = true;
+  return res.status(200).send(temp_playlist);
 };
 
 // update playlister route handler function ->

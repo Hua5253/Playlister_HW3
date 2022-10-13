@@ -28,8 +28,10 @@ function ListCard(props) {
     }
 
     // handle delete list ->
-    function handleDeleteList() {
-
+    function handleDeleteList(event) {
+        event.stopPropagation();
+        store.markListForDeletion(idNamePair);
+        store.showDeleteListModal();
     }
 
     function handleToggleEdit(event) {
