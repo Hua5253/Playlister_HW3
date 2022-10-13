@@ -310,6 +310,28 @@ export const useGlobalStore = () => {
         store.update_current_list(current_list);
     }
 
+    // Move song -> 
+    store.moveSong = (start, end) => {
+        let list = store.currentList;
+
+        if (start < end) {
+            let temp = list.songs[start];
+            for (let i = start; i < end; i++) {
+                list.songs[i] = list.songs[i + 1];
+            }
+            list.songs[end] = temp;
+        }
+        else if (start > end) {
+            let temp = list.songs[start];
+            for (let i = start; i > end; i--) {
+                list.songs[i] = list.songs[i - 1];
+            }
+            list.songs[end] = temp;
+        }
+        
+        store.update_current_list(list);
+    }
+
     store.undo = function () {
         tps.undoTransaction();
     }
