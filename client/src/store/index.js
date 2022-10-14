@@ -79,7 +79,7 @@ export const useGlobalStore = () => {
             case GlobalStoreActionType.CREATE_NEW_LIST: {
                 return setStore({
                     idNamePairs: payload.idNamePairs,
-                    currentList: null,
+                    currentList: payload.playlist,
                     newListCounter: store.newListCounter + 1,
                     listNameActive: false,
                     listKeyPairMarkedForDeletion: null,

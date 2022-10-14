@@ -8,7 +8,7 @@ const RemoveSongModal = () => {
     if (!currentList) return null;
 
     let index = store.songKeyMarked;
-    let title = index === undefined ? "" : currentList.songs[index].title;
+    let title = currentList.songs[index] === undefined ? "" : currentList.songs[index].title;
 
     return (
         <div 
