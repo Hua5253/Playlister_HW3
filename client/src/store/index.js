@@ -1,6 +1,11 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api/index'
+import AddSong_Transaction from '../transactions/AddSong_Transaction';
+import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction';
+import MoveSong_Transaction from '../transactions/MoveSong_Transaction';
+import EditSong_Transaction from '../transactions/EditSong_Transaction';
+
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -27,6 +32,8 @@ export const GlobalStoreActionType = {
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
 const tps = new jsTPS();
+
+const removedSongs = [];
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
@@ -356,6 +363,13 @@ export const useGlobalStore = () => {
         store.update_current_list(current_list);
     }
 
+    store.redoAddSong = () => {
+        let list = store.currentList;
+
+        list.songs.pop();
+        store.update_current_list(list);
+    }
+
     // Move song -> 
     store.moveSong = (start, end) => {
         let list = store.currentList;
@@ -387,12 +401,21 @@ export const useGlobalStore = () => {
 
     store.removeSong = (index) => {
         let list = store.currentList;
+        removedSongs.push(list.songs[index]);
 
         if (list != null) 
             list.songs.splice(index, 1);
 
         store.update_current_list(list);
         store.hideRemoveSongModal();
+    }
+
+    store.redoRemoveSong = (index) => {
+        let list = store.currentList;
+
+        let song = removedSongs.pop();
+        list.songs.splice(index, 0, song);
+        store.update_current_list(list);
     }
 
     store.showRemoveSongModal = () => {
@@ -461,6 +484,26 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.SONG_CHANGE,
             payload: tempSong
         })
+    }
+
+    store.addAddSongTransaction = () => {
+        let transaction = new AddSong_Transaction(store);
+        tps.addTransaction(transaction);
+    }
+
+    store.addRemoveSongTransaction = (index) => {
+        let transaction = new RemoveSong_Transaction(store, index);
+        tps.addTransaction(transaction);
+    }
+
+    store.addMoveSongTransaction = (start, end) => {
+        let transaction = new MoveSong_Transaction(store, start, end);
+        tps.addTransaction(transaction);
+    }
+
+    store.addEditSongTransaction = (index, tempSong, originSong) => {
+        let transaction = new EditSong_Transaction(store, index, tempSong, originSong);
+        tps.addTransaction(transaction);
     }
 
     store.undo = function () {

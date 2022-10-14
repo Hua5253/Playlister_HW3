@@ -28,7 +28,7 @@ const RemoveSongModal = () => {
                         <input type="button" 
                             id="remove-song-confirm-button" 
                             className="modal-button" 
-                            onClick={() => store.removeSong(index)}
+                            onClick={() => store.addRemoveSongTransaction(index)}
                             value='Confirm' />
                         <input type="button" 
                             id="remove-song-cancel-button" 

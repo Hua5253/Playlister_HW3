@@ -44,7 +44,7 @@ function SongCard(props) {
         setIsDragging(false);
         setDraggedTo(false);
 
-        store.moveSong(parseInt(sourceId), parseInt(targetId));       
+        store.addMoveSongTransaction(parseInt(sourceId), parseInt(targetId));       
     }
 
     function handleRemoveSong(event) {
@@ -55,7 +55,8 @@ function SongCard(props) {
     }
 
     function handleEditSong() {
-        store.markSongForEdit(index, song);
+        let tempSong = {title: song.title, artist: song.artist, youTubeId: song.youTubeId};
+        store.markSongForEdit(index, tempSong);
     }
 
     let cardClass = "list-card unselected-list-card";
