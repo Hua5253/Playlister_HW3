@@ -8,6 +8,10 @@ const EditSongModal = () => {
     let currentList = store.currentList;
     if (!currentList) return null;
 
+    let song = currentList.songs[index] === undefined ? {} : currentList.songs[index];
+    let originSong = {title: song.title, artist: song.artist, youTubeId: song.youTubeId};
+    console.log(originSong);
+
     return (
         <div 
             className="modal" 
@@ -49,7 +53,7 @@ const EditSongModal = () => {
                         <input type="button" 
                             id="edit-song-confirm-button" 
                             className="modal-button" 
-                            onClick={() => store.editSong(index, tempSong)}
+                            onClick={() => store.addEditSongTransaction(index, tempSong, originSong)}
                             value='Confirm' />
                         <input type="button" 
                             id="edit-song-cancel-button" 
