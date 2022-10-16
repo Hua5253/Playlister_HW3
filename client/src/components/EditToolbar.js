@@ -34,8 +34,8 @@ function EditToolbar() {
         store.closeCurrentList();
     }
     
-    let editStatus = false;
-    let isListModalOpen = store.isListModalOpen
+    
+    let isListModalOpen = store.isListModalOpen;
     let isRemoveSongModalOpen = store.isRemoveSongModalOpen;
     let isEditSongModalOpen = store.isEditSongModalOpen;
     const isModalOpen = (isListModalOpen || isRemoveSongModalOpen || isEditSongModalOpen);
@@ -57,6 +57,7 @@ function EditToolbar() {
     if (!canRedo || isModalOpen) redoClass += " disabled";
     if (!canClose || isModalOpen) closeClass += " disabled";
 
+    let editStatus = false;
     if (store.listNameEditActive) {
         editStatus = true;
     }

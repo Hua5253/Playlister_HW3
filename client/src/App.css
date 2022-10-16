@@ -95,7 +95,7 @@ body {
 }
 
 .disabled {
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 #playlister-statusbar {
@@ -112,6 +112,7 @@ body {
 }
 
 #add-list-button {
+  font-size: 35pt;
   float:left;
 }
 

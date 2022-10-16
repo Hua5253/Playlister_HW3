@@ -24,7 +24,17 @@ const ListSelector = () => {
       <ListCard key={pair._id} idNamePair={pair} selected={false} />
     ));
   }
-  
+
+  let isListModalOpen = store.isListModalOpen;
+  let editStatus = false;
+  if (store.listNameEditActive) {
+      editStatus = true;
+  }
+
+  let addListClass = 'playlister-button';
+  if (isListModalOpen || editStatus)
+      addListClass += " disabled";
+
   return (
     <div id='playlist-selector'>
       <div id='list-selector-list'>
@@ -33,7 +43,8 @@ const ListSelector = () => {
             type='button'
             id='add-list-button'
             onClick={handleCreateNewList}
-            className='playlister-button'
+            className={addListClass}
+            disabled={isListModalOpen}
             value='+'
           />
           Your Lists

@@ -71,7 +71,7 @@ export const useGlobalStore = () => {
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
                 return setStore({
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.playlist,
+                    currentList: null,
                     newListCounter: store.newListCounter,
                     listNameEditActive: false,
                     listKeyPairMarkedForDeletion: null,
@@ -97,7 +97,7 @@ export const useGlobalStore = () => {
             case GlobalStoreActionType.CREATE_NEW_LIST: {
                 return setStore({
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.playlist,
+                    currentList: null,
                     newListCounter: store.newListCounter + 1,
                     listNameEditActive: false,
                     listKeyPairMarkedForDeletion: null,
