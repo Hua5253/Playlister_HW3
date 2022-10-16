@@ -51,12 +51,13 @@ function SongCard(props) {
         // console.log(index);
         event.stopPropagation();
         store.markSongForRemove(index);
-        store.showRemoveSongModal();
+        store.showRemoveSongModal(index);
     }
 
     function handleEditSong() {
         let tempSong = {title: song.title, artist: song.artist, youTubeId: song.youTubeId};
         store.markSongForEdit(index, tempSong);
+        store.showEditSongModal(index, tempSong);
     }
 
     let cardClass = "list-card unselected-list-card";

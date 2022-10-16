@@ -31,7 +31,7 @@ function ListCard(props) {
     function handleDeleteList(event) {
         event.stopPropagation();
         store.markListForDeletion(idNamePair);
-        store.showDeleteListModal();
+        store.showDeleteListModal(idNamePair);
     }
 
     function handleToggleEdit(event) {
@@ -42,7 +42,7 @@ function ListCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            // store.setIsListNameEditActive();
+            store.setListNameEditActive();
         }
         setEditActive(newActive);
     }

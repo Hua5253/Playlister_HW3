@@ -10,7 +10,6 @@ const EditSongModal = () => {
 
     let song = currentList.songs[index] === undefined ? {} : currentList.songs[index];
     let originSong = {title: song.title, artist: song.artist, youTubeId: song.youTubeId};
-    console.log(originSong);
 
     return (
         <div 
