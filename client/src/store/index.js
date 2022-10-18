@@ -349,6 +349,8 @@ export const useGlobalStore = () => {
                         }
                     })
                 }
+
+                store.setCurrentList(playlist._id);
             }
         }
         asyncCreateNewList();
