@@ -91,11 +91,12 @@ getPlaylistPairs = async (req, res) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    if (!playlists.length) {
-      return res
-        .status(404)
-        .json({ success: false, error: "Playlists not found" });
-    } else {
+    // if (!playlists.length) {
+    //   return res
+    //     .status(404)
+    //     .json({ success: false, error: "Playlists not found" });
+    // } 
+    else {
       // PUT ALL THE LISTS INTO ID, NAME PAIRS
       let pairs = [];
       for (let key in playlists) {

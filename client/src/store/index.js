@@ -41,8 +41,6 @@ const tps = new jsTPS();
 
 const removedSongs = [];  // for redo remove song
 
-let modal_open_status = false;  // for foolproof design
-
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 export const useGlobalStore = () => {
@@ -111,7 +109,7 @@ export const useGlobalStore = () => {
                 return setStore({
                     idNamePairs: payload,
                     currentList: null,
-                    newListCounter: store.newListCounter,
+                    newListCounter: store.newListCounter - 1,
                     listNameEditActive: false,
                     listKeyPairMarkedForDeletion: null,
                     songKeyMarked: 0,
